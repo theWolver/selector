@@ -33,4 +33,4 @@ $arr = [
 ];
 echo $form->submit($arr);
 echo $form->close();
-include 'Index.html';
+include 'index.html';
