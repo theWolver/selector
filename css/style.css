@@ -1,0 +1,57 @@
+/*
+id="second"
+class="outer"
+id="parent" class="foo"
+id="sss" class="one_children"*/
+.tree{
+    color: red;
+}
+
+#outer{
+    position: relative;
+}
+
+.inner{
+    background-color: #5baf1d;
+    border: solid 2px blue;
+    height: auto;
+}
+
+#my_text{
+    padding: 15px;
+}
+
+#first{
+    background-color: #ff5330;
+    border: solid 2px blue;
+    margin-top: 15px;
+}
+#second{
+    background-color: #5baf1d;
+    border: solid 2px blue;
+    margin-top: 15px;
+    width: 50%;
+    position: relative;
+    height: 100px;
+}
+.out{
+    background-color: yellow;
+    width: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    height: 50px;
+}
+#parent{
+
+}
+.foo{
+    text-align: center;
+}
+#sss{
+    color: red;
+}
+.one_children{
+    display: inline-block;
+    vertical-align: middle;
+}
