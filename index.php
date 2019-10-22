@@ -22,7 +22,7 @@ $arr = [
     "type" => "text",
     "name" => "url",
     "id" => "for_my_frame",
-    "value" => "for_my_frame.html"
+    "value" => "https://www.mypetneedsthat.com/best-cat-gps-tracker/"
 ];
 echo $form->input($arr);
 
