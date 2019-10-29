@@ -1,7 +1,7 @@
 /**
  * Created by Wolverine on 20.10.2019.
  */
-
+let qwe="";
 // обрабатывает клик по кнопке отправки формы и возвращает в iframe содержимое html-файла, URL которого записано в value INPUT'a
 $(function () {
     $('#submit').on('click', function (event) {
@@ -105,11 +105,11 @@ function sendSelector(params_id, params_class, tags)
         success: function (data) {  //возвращаемый результат от сервера
             let result = $.parseJSON(data);
             console.log(result);
-            let qwe="";
             for (let i = 0; i < result.length; i++)
             {
                 qwe = qwe + result[i];
             }
+            qwe = "Title > " + qwe;
             $('#title').val(qwe);
         },
         error: function (data) {
@@ -122,6 +122,38 @@ let export_css = document.getElementById("export");
 export_css.addEventListener("click", exportButtonClick, false);
 function exportButtonClick()
 {
-    alert("Данные сохранеы в файл my_json.json");
-    //добавить AJAX на экспорт в файл
+    let title = $('#title').val();
+    let subtitle = $('#subtitle').val();
+    let intro_text = $('#intro_text').val();
+    let date = $('#date').val();
+    let author = $('#author').val();
+    let content = $('#content').val();
+    if((title.length>0)&&(subtitle.length>0)&&(intro_text.length>0)&&(date.length>0)&&(author.length>0)&&(content.length>0))
+    {
+        $.ajax({
+            method: "POST",
+            url: "export_to_file.php",
+            data: {
+                title: title,           //значение поля Title
+                subtitle: subtitle,     //значение поля SubTitle
+                intro_text: intro_text, //значение поля Intro Text
+                date: date,             //значение поля Date
+                author: author,         //значение поля Author
+                content: content        //значение поля Content
+            },
+            //response:'text',//тип возвращаемого ответа text либо xml
+            success: function (data) {  //возвращаемый результат от сервера
+               /* let result = $.parseJSON(data);
+                console.log(result);
+                $('#title').val(data);*/
+                alert("Данные сохранеы в файл export.json");
+            },
+            error: function (data) {
+                //$('#title').val(data);
+                alert("Произошла ошибка на сервере. Данные вероятно не сохранены!");
+            }
+        });
+    }
+    else
+        alert("Заполнены не все поля! Пожалуйста, заполните их!");
 }
