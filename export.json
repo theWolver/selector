@@ -1,0 +1,6 @@
+Title > body > #second > .out > #parent.foo > #.my_frame_click
+SubTitle > body > #second > .out > #parent.foo > #.my_frame_click2
+IntroText > body > #second > .out > #parent.foo > #.my_frame_click3
+Date > body > #second > .out > #parent.foo > #.my_frame_click4
+Author > body > #second > .out > #parent.foo > #.my_frame_click5
+Content > body > #second > .out > #parent.foo > #.my_frame_click6
