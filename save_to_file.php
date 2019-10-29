@@ -5,15 +5,20 @@
  * Date: 20.10.2019
  * Time: 17:26
  */
-$url = $_GET["my_url"];         //URL из input.value
-$str = $_GET["selectors_id"];   //event.target.id
-$str1 = $_GET["selectors_class"];//event.target.className
-$tag = $_GET["tag"];            //event.target.tagName
+$url = $_POST["my_url"];         //URL из input.value
+$str = $_POST["selectors_id"];   //event.target.id
+$str1 = $_POST["selectors_class"];//event.target.className
+$tag = $_POST["tag"];           //event.target.tagName
 $tag = mb_strtolower($tag);     //переводим в нижний регистр
 
 $doc=new DomDocument();         //Инициализируем класс DomDocument
-$doc->loadHTMLFile($url);       //Загружаем в класс HTML-страничку из URL полученного по AJAX
+//$doc->loadHTMLFile($url);       //Загружаем в класс HTML-страничку из URL полученного по AJAX
 
+//error_reporting(E_ALL | E_STRICT);
+$url = json_decode($url); //переводим полученную строку html-тегов из json-строки в html-строку
+libxml_use_internal_errors(true);
+$doc->loadHTML($url);     //загружаем HTML из строки
+libxml_clear_errors();
 //Извлекаем из документа все теги $_GET["tags"]
 $tags = $doc->getElementsByTagName($tag);
 
@@ -56,8 +61,9 @@ foreach ($tags  as $my_tag)
 }
 
 //создаём ассоциативный массив с начальным элементом = значению из $str
-$a= array( 0 => $str . "\r\n");
-$str= $str.' > ';
+$a = array( 0 => $str . "\r\n");
+$b = array( 0 => $tag . "\r\n");
+$str = $str.' > ';
 $i = 1;
 
 //проходим по узлам DOM вверх аж до body
@@ -74,15 +80,19 @@ while($domElement->parentNode->tagName!="body")
     if((empty($id))&&(empty($class)))
         $str = $domElement->parentNode->tagName.' > ';
     $a[$i] = $str;
+    $b[$i] = $domElement->parentNode->tagName.' > ';
     $i++;
     $domElement = $domElement->parentNode;
 }
 //записываем в массив сам body согласно условию поставленной задачи
 $str = "body > ";
 $a[$i] = $str;
+$b[$i] = $str;
 //делаем инверсию массива
 $reversed = array_reverse($a);
-
+$reversed2 = array_reverse($b);
 //выводим значения ассоциативного массива в файл .txt
 file_put_contents('my_json.json', $reversed, FILE_APPEND);
+file_put_contents('my_json.json', $reversed2, FILE_APPEND);
+echo json_encode($reversed);
 
