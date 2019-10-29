@@ -37,34 +37,63 @@ frame.addEventListener("load", iframeClick, false);
 function iframeClick() {
     //отключаем возможность клика по всем кнопкам установкой атрибута неактивности поля input
     $('#my_frame').contents().find('input').each(function () {
-        $('#my_frame').contents().find('input').attr('disabled', 'disabled');
+        $(this).attr('disabled', 'disabled'); //$('#my_frame').contents().find('input')
+        $(this).addClass("disabled");
+
     });
     //отключаем переходы по гиперссылкам
     $('#my_frame').contents().find('a').click(function () {
         event.preventDefault();
-        $(this).css("box-shadow", "3px 3px 33px 6px rgba(250,0,0,1)");
+        $(this).css('border-width', '0');
+        $(this).css("border", "3px solid red");
+        //$(this).css("box-shadow", "3px 3px 33px 6px rgba(250,0,0,1)");
         sendSelector(event.target.id, event.target.className, event.target.tagName);
     });
+
+  /*  $('input').click(function (event) {
+        if ($(this).hasClass('disabled')) {
+            alert('CLICKED, BUT DISABLED!!');
+        } else {
+            alert('Not disabled. =)');
+        }
+    });*/
+
     document.getElementById("my_frame").contentWindow.document.body.onclick = function()
     {
+        /*let qwe = $('#my_frame').contents().find('input[disabled="disabled"]');
+        if (qwe.hasClass('disabled')) {
+            alert('CLICKED, BUT DISABLED!!');
+        }*/
         let msg;
-        if(event.target.id!="")
+        if(event.target.id!=="")
             msg = $('#my_frame').contents().find('#'+event.target.id);
-        if(event.target.className)
-            msg = $('#my_frame').contents().find('.'+event.target.className);
-        msg.css("box-shadow", "3px 3px 33px 6px rgba(250,0,0,1)");
-       /* msg.css('border-width', '0');
-        msg.css("border", "3px solid red");*/
+        else
+        {
+            msg = $('#my_frame').contents().find(event.target);
+            msg.attr("id", "my_frame_click"); //принудительная установка id на кликнутом элементе
+        }
+        if(event.target.className!=="")
+        {
+            msg = $('#my_frame').contents().find('.' + event.target.className);
+            msg.attr("class", "my_frame_click"); //принудительная установка id на кликнутом элементе
+        }
+        //msg.css("box-shadow", "3px 3px 33px 6px rgba(250,0,0,1)");
+        msg.css('border-width', '0');
+        msg.css("border", "3px solid red");
        // msg.html(data); //table_result
-           sendSelector(event.target.id, event.target.className, event.target.tagName);
+            sendSelector(event.target.id, event.target.className, event.target.tagName);
     }
 }
 
 function sendSelector(params_id, params_class, tags)
 {
-    let value = $('input').val();
+    //let value = $('input').val();
+    let html = document.getElementById("my_frame").contentWindow.document.body.parentNode.innerHTML;
+    console.log(html);
+    let value = JSON.stringify("<!DOCTYPE html><html>"+html+"</html>");
+    console.log(value);
     $.ajax({
-        method: "GET",
+        method: "POST",
         url: "save_to_file.php",
         data: {
             my_url: value,
@@ -74,10 +103,25 @@ function sendSelector(params_id, params_class, tags)
         },
         //response:'text',//тип возвращаемого ответа text либо xml
         success: function (data) {  //возвращаемый результат от сервера
-            //$('#table_result').html(data);
+            let result = $.parseJSON(data);
+            console.log(result);
+            let qwe="";
+            for (let i = 0; i < result.length; i++)
+            {
+                qwe = qwe + result[i];
+            }
+            $('#title').val(qwe);
         },
         error: function (data) {
-            $('#result').html(data);
+            $('#title').val(data);
         }
     });
+}
+
+let export_css = document.getElementById("export");
+export_css.addEventListener("click", exportButtonClick, false);
+function exportButtonClick()
+{
+    alert("Данные сохранеы в файл my_json.json");
+    //добавить AJAX на экспорт в файл
 }
