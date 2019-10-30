@@ -2,6 +2,7 @@
  * Created by Wolverine on 20.10.2019.
  */
 let qwe="";
+let temp="";
 // обрабатывает клик по кнопке отправки формы и возвращает в iframe содержимое html-файла, URL которого записано в value INPUT'a
 $(function () {
     $('#submit').on('click', function (event) {
@@ -109,8 +110,13 @@ function sendSelector(params_id, params_class, tags)
             {
                 qwe = qwe + result[i];
             }
-            qwe = "Title > " + qwe;
-            $('#title').val(qwe);
+            qwe = temp + " > " + qwe;
+
+            let param = document.getElementById(temp);
+            unhighlighting(param);
+            param.value = qwe;
+
+            qwe = "";
         },
         error: function (data) {
             $('#title').val(data);
@@ -156,4 +162,54 @@ function exportButtonClick()
     }
     else
         alert("Заполнены не все поля! Пожалуйста, заполните их!");
+}
+
+//let flex_container_click = $('.flex_container input[type="text"]');
+//когда document загружен
+/*if (window.addEventListener)
+{
+    document.addEventListener("click", selectedInput, false);
+}
+function selectedInput()
+{
+    for (let i = 0; i < flex_container_click.length; i++)
+    {
+        if(flex_container_click[i].addEventListener("click", flex_container_clicks(i), false))
+        {
+            alert("Выбран input формы!");
+        }
+        /*flex_container_click[i].addEventListener('click', function()
+        {
+            flex_container_click[i].addEventListener('mouseover', highlight, false);
+            flex_container_click[i].addEventListener('mouseout', unhighlight, false);
+            alert("Выбран input формы!");
+        })*/
+/*    }
+}*/
+
+/*function flex_container_clicks(i)
+{
+    flex_container_click[i].addEventListener('mouseover', highlighting, false);
+    flex_container_click[i].addEventListener('mouseout', unhighlighting, false);
+}*/
+
+let flex_container_click = document.querySelectorAll('.flex_container input[type="text"]');
+flex_container_click.forEach(function(inp)
+{
+    inp.addEventListener('click', function()
+    {
+        //alert("Выбран input #" + this.id);
+        temp = this.id;
+        highlighting(this);
+        return temp;
+    });
+});
+
+
+function highlighting(param) {
+    param.style.backgroundColor = "orange";
+}
+
+function unhighlighting(param) {
+    param.style.backgroundColor = "white";
 }
