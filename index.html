@@ -7,7 +7,7 @@
     <script src="js/jquery-3.1.1.min.js"></script>
 </head>
 <body>
-<div class="flex_container">
+<form class="flex_container">
     <iframe id="my_frame" class="flex_block" src="" width="400" height="700"></iframe>
     <div class="flex_block">
         <div class="flex_block1"><label for="title">Title</label>
@@ -18,13 +18,13 @@
             <input type="text" id="intro_text"></div>
         <div class="flex_block1"><label for="date">Date</label>
             <input type="text" id="date"></div>
-            <div class="flex_block1"><label for="author">Author</label>
-                <input type="text" id="author"></div>
-                <div class="flex_block1"><label for="content">Content</label>
-                    <input type="text" id="content"></div>
+        <div class="flex_block1"><label for="author">Author</label>
+            <input type="text" id="author"></div>
+        <div class="flex_block1"><label for="content">Content</label>
+            <input type="text" id="content"></div>
+        <input type="submit" class="flex_block1" id="export" title="export" value="Export" style="left: 230px; margin-top:50px; position: relative">
     </div>
-</div>
-<input type="submit" id="export" title="export" value="Export" style="left: 290px; margin-top:10px; position: absolute">
+</form>
 <script src="js/Click.js"></script>
 </body>
 </html>
