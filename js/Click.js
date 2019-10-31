@@ -93,7 +93,7 @@ function sendSelector(params_id, params_class, tags)
     console.log(html);
     let value = JSON.stringify("<!DOCTYPE html><html>"+html+"</html>");
     console.log(value);
-    if(msg.getAttribute("id")==="my_frame_click") //если при следующем клике по iframe-элементу будет выбран элемент
+    if(msg.attr("id")==="my_frame_click") //если при следующем клике по iframe-элементу будет выбран элемент
         // после установки my_frame_click - может неправильно просчитаться номер $i в :nth-child, чтобы этого избежать
         // нужно уничтожить id="my_frame_click", сразу же после того, как оно будет записано вместе со всем innerHTML в let html.
         msg.removeAttr("id");
