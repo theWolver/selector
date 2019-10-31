@@ -3,6 +3,7 @@
  */
 let qwe="";
 let temp="";
+let msg;
 // обрабатывает клик по кнопке отправки формы и возвращает в iframe содержимое html-файла, URL которого записано в value INPUT'a
 $(function () {
     $('#submit').on('click', function (event) {
@@ -48,7 +49,6 @@ function iframeClick() {
         $(this).css('border-width', '0');
         $(this).css("border", "3px solid red");
         //$(this).css("box-shadow", "3px 3px 33px 6px rgba(250,0,0,1)");
-        sendSelector(event.target.id, event.target.className, event.target.tagName);
     });
 
   /*  $('input').click(function (event) {
@@ -65,7 +65,7 @@ function iframeClick() {
         if (qwe.hasClass('disabled')) {
             alert('CLICKED, BUT DISABLED!!');
         }*/
-        let msg;
+       // let msg;
         if(event.target.id!=="")
             msg = $('#my_frame').contents().find('#'+event.target.id);
         else
@@ -76,13 +76,13 @@ function iframeClick() {
         if(event.target.className!=="")
         {
             msg = $('#my_frame').contents().find('.' + event.target.className);
-            msg.attr("class", "my_frame_click"); //принудительная установка id на кликнутом элементе
+           // msg.attr("class", "my_frame_click"); //принудительная установка Class на кликнутом элементе
         }
         //msg.css("box-shadow", "3px 3px 33px 6px rgba(250,0,0,1)");
         msg.css('border-width', '0');
         msg.css("border", "3px solid red");
        // msg.html(data); //table_result
-            sendSelector(event.target.id, event.target.className, event.target.tagName);
+        sendSelector(event.target.id, event.target.className, event.target.tagName);
     }
 }
 
@@ -93,6 +93,10 @@ function sendSelector(params_id, params_class, tags)
     console.log(html);
     let value = JSON.stringify("<!DOCTYPE html><html>"+html+"</html>");
     console.log(value);
+    if(msg.getAttribute("id")==="my_frame_click") //если при следующем клике по iframe-элементу будет выбран элемент
+        // после установки my_frame_click - может неправильно просчитаться номер $i в :nth-child, чтобы этого избежать
+        // нужно уничтожить id="my_frame_click", сразу же после того, как оно будет записано вместе со всем innerHTML в let html.
+        msg.removeAttr("id");
     $.ajax({
         method: "POST",
         url: "save_to_file.php",
