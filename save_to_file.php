@@ -31,32 +31,43 @@ $count=0; //счётчик для опреледения наличия и id и
 foreach ($tags  as $my_tag)
 {
 //проверяем наличие атрибута - id/class у тега
-    if ($tags->item($i)->hasAttribute('id'))
-        //если атрибут есть - сравниваем его с переданным по AJAX в $_GET["selectors"]
-        if ($tags->item($i)->getAttribute('id') == $str) {
-            $domElement = $tags->item($i);  //запоминаем найденный узел DOM в $domElement
-            $str = '#' . $str;
-            $count++;
-        }
-//аналогичная проверка для атрибута 'class'
-    if ($tags->item($i)->hasAttribute('class'))
-        if ($tags->item($i)->getAttribute('class') == $str1) {
-            $domElement = $tags->item($i);
-            $str = '.' . $str1;
-            $count++;
+        if ($tags->item($i)->hasAttribute('id'))
+        {
+            //если атрибут есть - сравниваем его с переданным по AJAX в $_GET["selectors"]
+            if ($tags->item($i)->getAttribute('id') == $str) {
+                $domElement = $tags->item($i);  //запоминаем найденный узел DOM в $domElement
+                $str = '#' . $str;
+                $count++;
+            }
+            //если есть id и оно равно установленному нами #my_frame_click
+            if ($tags->item($i)->getAttribute('id') == "my_frame_click") {
+                $domElement = $tags->item($i);
+                $str = $tag . ":nth-child(" . (int)($i + 1) . ")";
+                break;
+            }
+//аналогичная проверка для атрибута 'class',
+//при условии что id есть всегда потому если его нет мы всё равно принудительно устанавливаем его, поэтому этот if вложен в if для id
+            if ($tags->item($i)->hasAttribute('class'))
+                if ($tags->item($i)->getAttribute('class') == $str1)
+                {
+                    $domElement = $tags->item($i);
+                    $str = '.' . $str1;
+                    $count++;
+                }
         }
 //если у узла есть и id и class (count=2)
-    if($count==2)
-    {
-        $domElement = $tags->item($i);
-        $str = '#' . $_GET["selectors_id"] . '.' . $str1;
-    }
-    //если же у узла нет вообще никакого css-селектора (count=0)
-    if((!$tags->item($i)->hasAttribute('id'))&&(!$tags->item($i)->hasAttribute('class'))&&($count==0))
-    {
-        $domElement = $tags->item($i);
-        $str = $tag . ":nth-child(".(int)($i+1).")";
-    }
+        if ($count == 2)
+        {
+            $domElement = $tags->item($i);
+            $str = '#' . $_GET["selectors_id"] . '.' . $str1;
+            break;
+        }
+        //если же у узла нет вообще никакого css-селектора (count=0) тут должно быть чтото типо if($str== "my_frame_click")
+        /*  if((!$tags->item($i)->hasAttribute('id'))&&(!$tags->item($i)->hasAttribute('class'))&&($count==0))
+          {
+              $domElement = $tags->item($i);
+              $str = $tag . ":nth-child(".(int)($i+1).")";
+          }*/
     $i++;
 }
 
